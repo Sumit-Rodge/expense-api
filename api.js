@@ -13,7 +13,8 @@ const { ObjectId } = require('mongodb');
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:3000', 
+    // origin: 'http://localhost:3000',
+    origin: 'https://expense-api-y41f.onrender.com',
     credentials: true
   }));
 app.use(cookieParser());
