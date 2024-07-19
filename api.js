@@ -14,12 +14,12 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     // origin: 'http://localhost:3000',
-    origin: 'https://expense-api-y41f.onrender.com',
+    origin: 'https://expense-tracker-api-u7ew.onrender.com',
     credentials: true
   }));
 app.use(cookieParser());
 
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT || 3000 ;
 const uri = process.env.DATABASE_URL ;
 
 // app.get('/',validate,async (req,res)=>{
