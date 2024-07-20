@@ -42,10 +42,7 @@ app.post('/login',async (req,res)=>{
 
         if(validPassword){
             const token = jwt.sign({"_id":data[0]._id},process.env.SECRET_KEY);
-            const options={
-                maxAge: 1000*60*30,
-                // httpOnly: true
-            };
+            const options={ expires: new Date(Date.now() + 900000), httpOnly: false };
             res.cookie('token',token,options);
             res.sendStatus(200);
         }else{
