@@ -42,7 +42,13 @@ app.post('/login',async (req,res)=>{
 
         if(validPassword){
             const token = jwt.sign({"_id":data[0]._id},process.env.SECRET_KEY);
-            const options={ expires: new Date(Date.now() + 900000), httpOnly: false };
+            const options = {
+                maxAge: 1000 * 60 * 15, // would expire after 15 minutes
+                httpOnly: false, // if you want to access the cookie in client-side JavaScript
+                sameSite: 'Lax', // or 'Strict' or 'None' depending on your needs
+                secure: false, // set to true if you're using HTTPS
+                path: '/', // ensure the cookie is accessible throughout your site
+            };
             res.cookie('token',token,options);
             res.sendStatus(200);
         }else{
