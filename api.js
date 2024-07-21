@@ -42,22 +42,25 @@ app.post('/login',async (req,res)=>{
 
         if(validPassword){
             const token = jwt.sign({"_id":data[0]._id},process.env.SECRET_KEY);
-            const options = {
-                maxAge: 1000 * 60 * 15, // would expire after 15 minutes
-                httpOnly: false, // if you want to access the cookie in client-side JavaScript
-                sameSite: 'Lax', // or 'Strict' or 'None' depending on your needs
-                secure: false, // set to true if you're using HTTPS
-                path: '/', // ensure the cookie is accessible throughout your site
-            };
-            res.cookie('token',token,options);
-            res.sendStatus(200);
+            // const options = {
+            //     maxAge: 1000 * 60 * 15, 
+            //     httpOnly: false, 
+            //     sameSite: 'Lax', 
+            //     secure: false, 
+            //     path: '/'
+            // };
+            // res.cookie('token',token,options);
+            res.status(200).send(token);
+            // res.send(token);
+
         }else{
-            res.sendStatus(401);
-            console.log('wrong password')
+            res.status(401).send('Wrong password');
+            // console.log('wrong password')
         }
     }else{
-        res.sendStatus(401);
-        console.log("email dosn't exist")
+        res.status(401).send("Email doesn't exist");
+        // console.log("email dosn't exist")
+        return;
     }
 })
 
