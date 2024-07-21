@@ -13,8 +13,8 @@ const { ObjectId } = require('mongodb');
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:3001',
-    // origin: 'https://expense-tracker-api-u7ew.onrender.com',
+    // origin: 'http://localhost:3000',
+    origin: 'https://expense-tracker-mern-mu.vercel.app/',
     credentials: true
   }));
 app.use(cookieParser());
@@ -42,14 +42,14 @@ app.post('/login',async (req,res)=>{
 
         if(validPassword){
             const token = jwt.sign({"_id":data[0]._id},process.env.SECRET_KEY);
-            // const options = {
-            //     maxAge: 1000 * 60 * 15, 
-            //     httpOnly: false, 
-            //     sameSite: 'Lax', 
-            //     secure: false, 
-            //     path: '/'
-            // };
-            // res.cookie('token',token,options);
+            const options = {
+                maxAge: 1000 * 60 * 15, 
+                httpOnly: false, 
+                sameSite: 'Lax', 
+                secure: false, 
+                path: '/'
+            };
+            res.cookie('token',token,options);
             res.status(200).send(token);
             // res.send(token);
 
