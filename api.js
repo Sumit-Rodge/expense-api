@@ -22,7 +22,7 @@ app.use(cookieParser());
 const PORT = process.env.PORT || 3000 ;
 const uri = process.env.DATABASE_URL ;
 
-// app.get('/',validate,async (req,res)=>{
+// Get users
 app.get('/',async (req,res)=>{
     const client = await MongoClient.connect(uri);
     const data = await client.db('users').collection('users').find({}).toArray();
@@ -152,6 +152,72 @@ app.put('/deleteexpense',async (req,res)=>{
     } catch (error) {
         console.log(error);
         res.status(401);
+    }
+    
+})
+
+// get single expense using its id
+app.get('/getexpenese/:id/:expenseid',async (req,res)=>{
+    const id = req.params.id;
+    const expenseId = req.params.expenseid;
+    const decode = jwt.verify(id,process.env.SECRET_KEY);
+    const client = await MongoClient.connect(uri);
+    const data = await client.db('users').collection('expenses').find({"id":new ObjectId(decode._id),"expenses.id": expenseId}).toArray();
+
+    let singleExpense;
+    data.map((element)=>{
+        element.expenses.map(element =>{
+            if(element.id == expenseId){
+                singleExpense = element
+            }
+        })
+    })
+    res.status(200);
+    res.send(singleExpense); 
+})
+
+// Get single expense using its id
+app.get('/getexpenese/:id/:expenseid',async (req,res)=>{
+    const id = req.params.id;
+    const expenseId = req.params.expenseid;
+    const decode = jwt.verify(id,process.env.SECRET_KEY);
+    const client = await MongoClient.connect(uri);
+    const data = await client.db('users').collection('expenses').find({"id":new ObjectId(decode._id),"expenses.id": expenseId}).toArray();
+
+    let singleExpense;
+    data.map((element)=>{
+        element.expenses.map(element =>{
+            if(element.id == expenseId){
+                singleExpense = element
+            }
+        })
+    })
+    res.status(200);
+    res.send(singleExpense); 
+})
+
+// Update a single expense using its id
+app.put("/editexpense/:id/:expenseid",async (req,res)=>{
+    try{
+        const id = req.params.id;
+        const body = req.body;
+        const expenseId = req.params.expenseid;
+        const decode = jwt.verify(id,process.env.SECRET_KEY);
+        const client = await MongoClient.connect(uri);
+        await client.db('users').collection('expenses').updateOne({"id":new ObjectId(decode._id),"expenses.id": expenseId},
+        {
+            "$set" :
+            {
+                "expenses.$.amount":body.amount,
+                "expenses.$.description":body.description,
+                "expenses.$.category":body.category,
+            }
+        }
+        );
+        res.sendStatus(200);
+    }catch(error){
+        console.log(error)
+        res.sendStatus(404)
     }
     
 })
