@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
-const auth = require('../validate');
+const auth = require('./validate');
 const { v4: uuidv4 } = require('uuid');
 
 const { ObjectId } = require('mongodb');
